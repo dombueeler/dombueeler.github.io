@@ -1,11 +1,259 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8">
-    <title>Welcome to My Site</title>
-  </head>
-  <body>
-    <h1>Hello, I’m Dominik Büeler 👋</h1>
-    <p>Welcome to my personal website hosted on GitHub Pages!</p>
-  </body>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>My GitHub Page</title>
+  <meta name="description" content="Simple single-file GitHub Pages template with editable pages" />
+  <style>
+    :root{
+      --bg:#0f1724; --card:#0b1220; --muted:#9aa4b2; --accent:#60a5fa;
+      --glass: rgba(255,255,255,0.03);
+      --gap:18px;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;min-height:100vh;background:linear-gradient(180deg,#081226 0%, #071022 100%);color:#e6eef6}
+    .container{max-width:1100px;margin:28px auto;padding:20px;display:grid;grid-template-columns:260px 1fr;gap:var(--gap)}
+
+    /* Sidebar */
+    .sidebar{background:var(--card);border-radius:14px;padding:22px;box-shadow:0 8px 30px rgba(2,6,23,0.6)}
+    .photo{width:120px;height:120px;border-radius:999px;overflow:hidden;margin:0 auto;display:block;border:4px solid rgba(255,255,255,0.06)}
+    .photo img{width:100%;height:100%;object-fit:cover;display:block}
+    .name{text-align:center;margin-top:12px;font-weight:700}
+    .links{margin-top:18px;display:flex;flex-direction:column;gap:8px}
+    .links a{padding:10px 12px;border-radius:10px;text-decoration:none;color:var(--muted);background:var(--glass);display:flex;align-items:center;gap:10px}
+    .links a:hover{color:var(--accent);transform:translateY(-2px)}
+    .links small{color:var(--muted)}
+
+    /* Main card */
+    .main{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:14px;padding:16px}
+    .header-row{display:flex;justify-content:space-between;align-items:center;padding:8px 4px}
+    .nav{display:flex;gap:10px}
+    .topic{position:relative}
+    .topic > button{background:none;border:0;color:#dceafe;padding:8px 12px;border-radius:8px;cursor:pointer;font-weight:600}
+    .topic > button:hover{background:rgba(255,255,255,0.02)}
+    .dropdown{position:absolute;top:44px;left:0;background:rgba(2,6,23,0.95);min-width:200px;border-radius:10px;padding:8px;box-shadow:0 12px 30px rgba(2,6,23,0.7);display:none}
+    .dropdown a{display:block;padding:8px;border-radius:8px;text-decoration:none;color:var(--muted)}
+    .dropdown a:hover{color:var(--accent)}
+
+    .controls{display:flex;gap:8px;align-items:center}
+    button.btn{background:transparent;border:1px solid rgba(255,255,255,0.06);padding:8px 12px;border-radius:10px;color:var(--muted);cursor:pointer}
+    button.primary{background:linear-gradient(90deg,var(--accent),#3b82f6);border:0;color:#04233a}
+
+    /* Content */
+    .page-title{font-size:20px;font-weight:700;margin:8px 0}
+    .editor{min-height:380px;padding:16px;border-radius:10px;background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00));border:1px solid rgba(255,255,255,0.02);color:#dbeafe}
+    .editor[contenteditable="true"]:focus{outline:3px solid rgba(96,165,250,0.12)}
+    .hint{color:var(--muted);font-size:13px;margin-top:8px}
+
+    /* responsive */
+    @media (max-width:900px){.container{grid-template-columns:1fr;}.sidebar{order:2}.main{order:1}}
+
+    /* small footer */
+    .footer{margin-top:12px;color:var(--muted);font-size:13px}
+  </style>
+</head>
+<body>
+  <!--
+    Single-file GitHub Pages template.
+    How to use:
+      - Replace the <img> src in the sidebar (.photo img) with your own round photo (square images work best).
+      - Click the header topics -> choose a page. Click Edit to modify the content, then Save to persist in the browser (localStorage).
+      - You can reset a page to the built-in sample content using Reset.
+      - To deploy, drop this file into your gh-pages branch or use it as index.html in your repository's docs/ or root.
+  -->
+
+  <div class="container">
+    <aside class="sidebar">
+      <div class="photo" title="Replace src in IMG with your photo">
+        <img src="https://avatars.githubusercontent.com/u/9919?s=200&v=4" alt="Your photo" id="profilePhoto">
+      </div>
+      <div class="name">Your Name</div>
+      <p class="hint" style="text-align:center">Short subtitle or role</p>
+
+      <nav class="links" aria-label="sidebar links">
+        <a href="#" id="link-website">🔗 Website <small style="margin-left:auto">your.site</small></a>
+        <a href="#" id="link-github">🐙 GitHub <small style="margin-left:auto">github.com/you</small></a>
+        <a href="#" id="link-cv">📄 Resume <small style="margin-left:auto">Download</small></a>
+        <a href="#" id="link-contact">✉️ Contact <small style="margin-left:auto">email@me</small></a>
+      </nav>
+
+      <div class="footer">Made for <strong>GitHub Pages</strong>. Click a page from the header to begin editing.</div>
+    </aside>
+
+    <main class="main" role="main">
+      <div class="header-row">
+        <div class="nav">
+          <div class="topic">
+            <button id="topic-about">About me ▾</button>
+            <div class="dropdown" data-topic="about">
+              <a href="#" data-page="about-bio">Bio</a>
+              <a href="#" data-page="about-cv">CV</a>
+            </div>
+          </div>
+
+          <div class="topic">
+            <button id="topic-pubs">Publications ▾</button>
+            <div class="dropdown" data-topic="pubs">
+              <a href="#" data-page="pubs-journals">Journal Papers</a>
+              <a href="#" data-page="pubs-confs">Conference Papers</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="controls">
+          <button class="btn" id="btn-edit">Edit</button>
+          <button class="btn" id="btn-save">Save</button>
+          <button class="btn" id="btn-reset">Reset</button>
+          <button class="btn" id="btn-export">Export</button>
+        </div>
+      </div>
+
+      <h2 class="page-title" id="pageTitle">Welcome</h2>
+      <article class="editor" id="editor" contenteditable="false" spellcheck="true">
+        <h3>Welcome</h3>
+        <p>This is a compact GitHub Pages template. Choose <em>About me → Bio</em> or <em>Publications → Journal Papers</em> from the header to load editable pages. Click <strong>Edit</strong> to modify content and <strong>Save</strong> to persist changes in your browser.</p>
+      </article>
+      <div class="hint">Pages you edit are stored locally in your browser (localStorage). They will persist on the device and browser where you edit them.</div>
+    </main>
+  </div>
+
+  <script>
+    // Built-in sample content for four pages
+    const SAMPLE = {
+      'about-bio': `
+        <h3>Bio</h3>
+        <p>Write a short biography here. Example: I'm a researcher/developer interested in web, data and open-source.</p>
+      `,
+      'about-cv': `
+        <h3>CV</h3>
+        <ul>
+          <li>PhD, Somewhere University</li>
+          <li>Software Engineer — Company</li>
+          <li>Interests: open-source, JS, data visualization</li>
+        </ul>
+      `,
+      'pubs-journals': `
+        <h3>Journal Papers</h3>
+        <ol>
+          <li>Author A., Title, <em>Journal</em>, 2021.</li>
+          <li>Author B., Title, <em>Journal</em>, 2020.</li>
+        </ol>
+      `,
+      'pubs-confs': `
+        <h3>Conference Papers</h3>
+        <ol>
+          <li>Author A., Title, <em>Conference</em>, 2022.</li>
+        </ol>
+      `
+    };
+
+    // State
+    let currentPage = null;
+    const editor = document.getElementById('editor');
+    const pageTitle = document.getElementById('pageTitle');
+
+    // Toggle dropdowns
+    document.querySelectorAll('.topic').forEach(t => {
+      const btn = t.querySelector('button');
+      const dd = t.querySelector('.dropdown');
+      btn.addEventListener('click', (ev)=>{
+        ev.stopPropagation();
+        // close other dropdowns
+        document.querySelectorAll('.dropdown').forEach(x=>{ if(x!==dd) x.style.display='none'; });
+        dd.style.display = dd.style.display==='block' ? 'none' : 'block';
+      });
+    });
+    // close dropdowns when clicking outside
+    window.addEventListener('click', ()=> document.querySelectorAll('.dropdown').forEach(x=>x.style.display='none'));
+
+    // Load a page
+    function loadPage(id){
+      currentPage = id;
+      const title = id.split('-').map(s=> s[0].toUpperCase()+s.slice(1)).join(' ');
+      pageTitle.textContent = title;
+      // load from localStorage or fallback to sample
+      const key = 'ghpage_' + id;
+      const saved = localStorage.getItem(key);
+      editor.innerHTML = saved || SAMPLE[id] || '<p>(empty)</p>';
+      editor.setAttribute('contenteditable','false');
+      document.getElementById('btn-edit').textContent = 'Edit';
+    }
+
+    // Click handlers for page links in dropdowns
+    document.querySelectorAll('.dropdown a[data-page]').forEach(a=>{
+      a.addEventListener('click', (ev)=>{
+        ev.preventDefault();
+        const pid = a.dataset.page;
+        loadPage(pid);
+      });
+    });
+
+    // Buttons
+    document.getElementById('btn-edit').addEventListener('click', ()=>{
+      if(!currentPage){ alert('Please choose a page from the header first.'); return; }
+      const editing = editor.getAttribute('contenteditable') === 'true';
+      if(editing){
+        editor.setAttribute('contenteditable','false');
+        document.getElementById('btn-edit').textContent = 'Edit';
+      } else {
+        editor.setAttribute('contenteditable','true');
+        editor.focus();
+        document.getElementById('btn-edit').textContent = 'Stop edit';
+      }
+    });
+
+    document.getElementById('btn-save').addEventListener('click', ()=>{
+      if(!currentPage){ alert('Choose a page to save.'); return; }
+      const key = 'ghpage_' + currentPage;
+      localStorage.setItem(key, editor.innerHTML);
+      alert('Saved to localStorage for this browser.');
+      editor.setAttribute('contenteditable','false');
+      document.getElementById('btn-edit').textContent = 'Edit';
+    });
+
+    document.getElementById('btn-reset').addEventListener('click', ()=>{
+      if(!currentPage){ alert('Choose a page to reset.'); return; }
+      if(!confirm('Reset this page to the original sample content? This will remove any saved edits in this browser.')) return;
+      const key = 'ghpage_' + currentPage;
+      localStorage.removeItem(key);
+      editor.innerHTML = SAMPLE[currentPage] || '<p>(empty)</p>';
+      editor.setAttribute('contenteditable','false');
+      document.getElementById('btn-edit').textContent = 'Edit';
+    });
+
+    document.getElementById('btn-export').addEventListener('click', ()=>{
+      if(!currentPage){ alert('Choose a page first.'); return; }
+      const blob = new Blob([`<h1>${pageTitle.textContent}</h1>\n` + editor.innerHTML], {type:'text/html'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = currentPage + '.html';
+      document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+    });
+
+    // Initialize — load a default page
+    loadPage('about-bio');
+
+    // Quick replaceable links in sidebar: update hrefs here if you like
+    document.getElementById('link-github').href = 'https://github.com/';
+    document.getElementById('link-website').href = '#';
+    document.getElementById('link-cv').href = '#';
+    document.getElementById('link-contact').href = 'mailto:your@email.example';
+
+    // Allow user to replace the profile photo by drag & drop onto the image
+    const photoImg = document.getElementById('profilePhoto');
+    photoImg.addEventListener('click', ()=>{
+      const url = prompt('Enter image URL for your profile photo (must be CORS-accessible):');
+      if(url) photoImg.src = url;
+    });
+
+    // Optional: remember last-open page across sessions
+    window.addEventListener('beforeunload', ()=>{
+      if(currentPage) localStorage.setItem('ghpage_last', currentPage);
+    });
+    const last = localStorage.getItem('ghpage_last');
+    if(last && SAMPLE[last]) loadPage(last);
+  </script>
+</body>
 </html>
